@@ -12,7 +12,7 @@
     "enabled_dhcp": "DHCP server enabled",
     "disabled_dhcp": "DHCP server disabled",
     "unavailable_dhcp": "DHCP is unavailable",
-    "unavailable_dhcp_desc": "AdGuard Home cannot run a DHCP server on your Operating System",
+    "unavailable_dhcp_desc": "AdGuard Home cannot run a DHCP server on your OS",
     "dhcp_title": "DHCP server (experimental!)",
     "dhcp_description": "If your router does not provide DHCP settings, you can use AdGuard's own built-in DHCP server.",
     "dhcp_enable": "Enable DHCP server",
