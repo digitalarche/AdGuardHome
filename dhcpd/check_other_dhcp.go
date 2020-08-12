@@ -84,6 +84,7 @@ func CheckIfOtherDHCPServersPresent(ifaceName string) (bool, error) {
 		n, _, _, err := c.ReadFrom(b)
 		if isTimeout(err) {
 			// timed out -- no DHCP servers
+			log.Debug("DHCPv4: didn't receive DHCP response")
 			return false, nil
 		}
 		if err != nil {
