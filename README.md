@@ -155,7 +155,10 @@ Run `make init` to prepare the development environment.
 You will need this to build AdGuard Home:
 
  * [go](https://golang.org/dl/) v1.14 or later.
- * [node.js](https://nodejs.org/en/download/) v10 or later.
+ * [node.js](https://nodejs.org/en/download/) v10.16.2 or later.
+ * [npm](https://www.npmjs.com/) v6.14 or later.
+
+Optionally, for Go devs:
  * [golangci-lint](https://github.com/golangci/golangci-lint)
  
 ### Building
@@ -213,6 +216,8 @@ You may need to prepare before using these builds:
 ## Contributing
 
 You are welcome to fork this repository, make your changes and submit a pull request — https://github.com/AdguardTeam/AdGuardHome/pulls
+
+Please note, that we don't expect people to contribute to both UI and golang parts of the program simultaneously. Ideally, the golang part is implemented first, i.e. configuration, API, and the functionality itself. The UI part can be implemented later in a different pull request by a different person.
 
 <a id="test-unstable-versions"></a>
 ### Test unstable versions
