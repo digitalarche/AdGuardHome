@@ -315,6 +315,27 @@ describe('sortIp', () => {
             ];
             expect(arr.sort(sortIp)).toStrictEqual(sortedArr);
         });
+        test('always put ipv4 before ipv6', () => {
+            const arr = [
+                '::1',
+                '0.0.0.2',
+                '127.0.0.1',
+                '::2',
+                '2001:db8:11a3:9d7:0:0:0:2',
+                '0.0.0.1',
+                '2001:db8:11a3:9d7::1',
+            ];
+            const sortedArr = [
+                '0.0.0.1',
+                '0.0.0.2',
+                '127.0.0.1',
+                '::1',
+                '::2',
+                '2001:db8:11a3:9d7::1',
+                '2001:db8:11a3:9d7:0:0:0:2',
+            ];
+            expect(arr.sort(sortIp)).toStrictEqual(sortedArr);
+        });
     });
     describe('cidr', () => {
         test('only ipv4 cidr', () => {
@@ -380,6 +401,35 @@ describe('sortIp', () => {
             expect(arr.sort(sortIp)).toStrictEqual(sortedArr);
         });
     });
+    describe('invalid input', () => {
+        const originalError = console.error;
+
+        beforeEach(() => {
+            console.error = jest.fn();
+        });
+
+        afterEach(() => {
+            expect(console.error).toHaveBeenCalled();
+            console.error = originalError;
+        });
+
+        test('invalid strings', () => {
+            const arr = ['invalid ip', 'invalid cidr'];
+            expect(arr.sort(sortIp)).toStrictEqual(arr);
+        });
+        test('invalid ip', () => {
+            const arr = ['127.0.0.2.', '.127.0.0.1.', '.2001:db8:11a3:9d7:0:0:0:0'];
+            expect(arr.sort(sortIp)).toStrictEqual(arr);
+        });
+        test('invalid cidr', () => {
+            const arr = ['127.0.0.2/33', '2001:db8:11a3:9d7:0:0:0:0/129'];
+            expect(arr.sort(sortIp)).toStrictEqual(arr);
+        });
+        test('valid and invalid ip', () => {
+            const arr = ['127.0.0.4.', '127.0.0.1', '.127.0.0.3', '127.0.0.2'];
+            expect(arr.sort(sortIp)).toStrictEqual(arr);
+        });
+    });
     describe('mixed', () => {
         test('ipv4, ipv6 in short and long forms and cidr', () => {
             const arr = [
@@ -406,7 +456,6 @@ describe('sortIp', () => {
                 '::1',
             ];
             const sortedArr = [
-                '::1',
                 '127.0.0.1/12',
                 '127.0.0.1/32',
                 '127.0.0.1',
@@ -416,6 +465,7 @@ describe('sortIp', () => {
                 '192.168.1.1',
                 '192.168.1.2/12',
                 '192.168.1.2',
+                '::1',
                 '2001:db7::/32',
                 '2001:db7::/64',
                 '2001:db7::',

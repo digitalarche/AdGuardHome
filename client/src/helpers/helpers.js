@@ -694,14 +694,19 @@ const getParsedIpWithPrefixLength = (ip) => {
  * @returns {number[]}
  */
 const getAddressesComparisonBytes = (item) => {
+    // Sort ipv4 before ipv6
+    const IP_V4_COMPARISON_CODE = 0;
+    const IP_V6_COMPARISON_CODE = 1;
+
     const [parsedIp, cidr] = ipaddr.isValid(item)
-        ? getParsedIpWithPrefixLength(item) : ipaddr.parseCIDR(item);
+        ? getParsedIpWithPrefixLength(item)
+        : ipaddr.parseCIDR(item);
 
-    const normalizedBytes = parsedIp.kind() === 'ipv4'
-        ? parsedIp.toIPv4MappedAddress().parts
-        : parsedIp.parts;
+    const [normalizedBytes, ipVersionComparisonCode] = parsedIp.kind() === 'ipv4'
+        ? [parsedIp.toIPv4MappedAddress().parts, IP_V4_COMPARISON_CODE]
+        : [parsedIp.parts, IP_V6_COMPARISON_CODE];
 
-    return normalizedBytes.concat(cidr);
+    return [ipVersionComparisonCode, ...normalizedBytes, cidr];
 };
 
 /**
